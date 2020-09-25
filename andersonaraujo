@@ -1,31 +1,5 @@
-From client A access server A first and execute the command below to allow access to port 8000 on the Centos's firewall.
+ssh -L 1000:clientA:1234 serverA ssh -L 5678:clientA:8000 -N serverB
 
-firewall-cmd --permanent --add-port=8000/tcp
-firewall-cmd --permanent --add-port=80/tcp
-firewall-cmd --reload
+This will open a tunnel from clientA to serverA and another tunnel from serverA to serverB.
 
-Then server A would access server B and execute the same command as above.
-
-I would go back to server A. If I didn't have a web service running, I would install an apache, for example.
-
-yum install httpd24
-yum install mod24_ssl
-
-Then I would create a Virtual Host with the content below:
-
-<VirtualHost *:80>
-
- ServerName servera
-
- SSLProxyEngine On
- <Location /serverb>
-  ProxyPass http://serverb:8000/
-  ProxyPassReverse  https://serverb:8000/
-  RequestHeader set Host serverb
- </Location>
- 
-</VirtualHost>
-
-Thus, when client A accesses http: //servera/serverb it will be redirected to port 8000 (http) of server B.
-
-To improve access between client A and server B, a VPN would be placed between them. In the same way as access between Client A and server A.
+Therefore, when open the addrees http://localhost:8000 in a browser will connected on service port 8000 of serverB.
